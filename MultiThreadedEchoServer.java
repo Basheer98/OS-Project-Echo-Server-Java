@@ -57,9 +57,9 @@ public class MultiThreadedEchoServer {
                 }
 
                 clientSocket.close();
-                System.out.println("Connection closed with client: " + clientSocket.getInetAddress());
+                System.out.println("Client Ended the Connection: " + clientSocket.getInetAddress());
             } catch (IOException e) {
-                System.err.println("Error handling client: " + e.getMessage());
+                System.err.println("Error Connecting client: " + e.getMessage());
             }
         }
     }
