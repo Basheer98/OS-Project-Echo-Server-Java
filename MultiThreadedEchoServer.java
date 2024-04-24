@@ -17,12 +17,12 @@ public class MultiThreadedEchoServer {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected: " + clientSocket.getInetAddress());
+                System.out.println("New client connected.");
 
                 executorService.execute(new ClientHandler(clientSocket));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error starting the server: " + e.getMessage());
         } finally {
             executorService.shutdown();
         }
@@ -46,20 +46,20 @@ public class MultiThreadedEchoServer {
 
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     String received = new String(buffer, 0, bytesRead);
-                    System.out.println("Client " + clientSocket.getInetAddress() + ": " + received);
+                    System.out.println("Received from client " + clientSocket.getInetAddress() + ": " + received);
 
-                    if ("Done".equalsIgnoreCase(received.trim())) {
+                    if ("Done".equals(received.trim())) {
                         outputStream.write("Done".getBytes());
                         break;
                     } else {
-                        outputStream.write(received.getBytes());
+                        outputStream.write(buffer, 0, bytesRead);
                     }
                 }
 
                 clientSocket.close();
-                System.out.println("Client Ended the Connection: " + clientSocket.getInetAddress());
+                System.out.println("Client disconnected: " + clientSocket.getInetAddress());
             } catch (IOException e) {
-                System.err.println("Error Connecting client: " + e.getMessage());
+                System.err.println("Error handling client: " + e.getMessage());
             }
         }
     }
